@@ -95,7 +95,37 @@ function connectBots() {
 
 function assignEvents() {
 	amount = begginAmount;
-	console.log("assign events");
+	if (debugState == 3) {
+		console.log("assigning events");
+		debugState++;
+	}
+	while(amount != 0) {
+		botName = "bot" + amount;
+		botObject = null;
+		eval("botObject = " + botName);
+		botObject.on('connected', connected);
+		botObject.on('lostMyBalls', died);
+	}
 	
+	
+}
+
+function connected() {
+	
+	
+}
+
+function died() {
+	
+	
+}
+
+function spawnAll() {
+	
+	
+}
+
+function spawn(ball) {
+	ball.spawn("facebot ;)");
 }
 

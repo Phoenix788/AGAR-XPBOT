@@ -3,7 +3,7 @@ var amount = 5;
 var begginAmount = amount;
 var account;
 var token = "null";
-var myaccount = {c_user: "100004281284637", datr: "e7HdVmBQ9kEkPZG5L5QMZok1", xs: "203%3ASG2ABr7g3o8xQA%3A2%3A1457372919%3A14980"};
+var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
 var botChain = {};
 var debugState = 0;
 var serversChain = [];

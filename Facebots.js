@@ -1,7 +1,6 @@
 var AgarioClient = require('agario-client');
 var amount = 5;
 var begginAmount = amount;
-var account;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
 var botChain = {};
@@ -10,41 +9,46 @@ var serversChain = [];
 var region = "EU-London";
 var tempServ;
 
-function obtainFacebookToken() {
-	account = AgarioClient.Account()
-	account.requestFBToken(function(obtainedToken, info) {
-	    //If you have `token` then you can set it to `client.auth_token`
-	    // and `client.connect()` to agar server
-		if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
-		
-		token = obtainedToken;
-		console.log("TOKEN : " + token);
-		console.log("expire in : " + account.token_expire)
-	});
-}
+var account = new AgarioClient.Account();
+account.c_user = myaccount.c_user;
+account.datr = myaccount.datr;
+account.xs = myaccount.xs;
 
+account.requestFBToken(function(obtainedToken, info) {
+    //If you have `token` then you can set it to `client.auth_token`
+    // and `client.connect()` to agar server
+	if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
+	
+	token = obtainedToken;
+	console.log("TOKEN : " + token);
+	console.log("expire in : " + account.token_expire);
+	console.log(account);
+	start();
+});
 
-while (amount != 0) {
-	if (token != "null") {
-		return;
-	}
-	else{
-		if (debugState == 0);
-			{
-				console.log("creating and assigning token to bots... TOKEN: " + token);
-				debugState++;
-			}
+function start() {
+	while (amount != 0) {
+		if (token != "null") {
+			return;
+		}
+		else{
+			if (debugState == 0);
+				{
+					console.log("creating and assigning token to bots... TOKEN: " + token);
+					debugState++;
+				}
+				
+			var botName = "bot" + amount;
+			var botObject;
+			eval("var " + botName + " = new AgarioClient(' "+ botName +" ');");
+			eval("botChain." + botName + " = " + botName);
+			eval("botChain." + botName + ".auth_token = token");
+		//	botObject.auth_token = token;
 			
-		var botName = "bot" + amount;
-		var botObject;
-		eval("var " + botName + " = new AgarioClient(' "+ botName +" ');");
-		eval("botChain." + botName + " = " + botName);
-		eval("botChain." + botName + ".auth_token = token");
-	//	botObject.auth_token = token;
-		
-		
-		amount--;
-		makeServerChain;
+			
+			amount--;
+			makeServerChain;
+		}
 	}
 }
 

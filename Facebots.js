@@ -1,5 +1,5 @@
 var AgarioClient = require('agario-client');
-var amount = 5; //amount of bot
+var amount = 10; //amount of bot
 var begginAmount = amount;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
@@ -8,6 +8,7 @@ var debugState = 0;
 var serversChain = [];
 var region = "EU-London";
 var tempServ;
+
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
@@ -47,7 +48,7 @@ function start() {
 			
 			
 			amount--;
-			makeServerChain;
+			makeServerChain();
 		}
 	}
 }
@@ -57,48 +58,20 @@ function makeServerChain() {
 		console.log("requesting different FFA servers for Bots...");
 		debugState++;
 	}
-	amount = begginAmount;
-	while (amount != 0) {
-	tempServ = RequestFFAServer();
-	var yesOrNot = verifyIP(tempServ);
-	if (yesOrNot = true) {
-		serversChain.push(tempServer);
-		tempServ = null
-		amount--;
-	} else {
-		tempServ = null;
+	RequestFFAServer();
+	if (amount == 0) {
+		setTimeout(connectBots, 1000);
 	}
-} 
-if(amount == 0) {
-	console.log("serversChain: " + serversChain);
-	connectBots();
 }
-}
-
-
 
 function RequestFFAServer() {
-	AgarioClient.servers.getFFAServer({region: region}, function(srv) { 
+	AgarioClient.servers.getFFAServer({region: region}, function(srv) {
 	    if(!srv.server) return console.log('Failed to request server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
-		tempServ = "ws://" + srv.server;
+		tmp = "ws://" + srv.server;
+		console.log("Server IP: " + tmp);
+		serversChain.push(tmp);
 		
 	});
-	return tempServ;
-}
-
-function verifyIP(server) {
-	var i;
-	i = serversChain.length();
-	while (i != 0) {
-		if (server == serversChain[i]);
-		{
-			return false;
-		}
-		i--;
-	}
-	if (i == 0){
-		return true;
-	}
 }
 
 function connectBots() {
@@ -110,7 +83,8 @@ function connectBots() {
 	while (amount != 0) {
 		var botName = "bot" + amount;
 		console.log(botName + " is connecting...");
-		eval("botChain." + botName + ".connect(serversChain[amount]);");
+		console.log(serversChain[amount - 1]);
+		eval("botChain." + botName + ".connect(serversChain[amount - 1]);");
 		amount--;
 	}
 	if (amount == 0) {
@@ -118,9 +92,10 @@ function connectBots() {
 	}
 }
 
+
 function assignEvents() {
 	amount = begginAmount;
-	
+	console.log("assign events");
 	
 }
 

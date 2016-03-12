@@ -1,5 +1,5 @@
 var AgarioClient = require('agario-client');
-var amount = 5;
+var amount = 5; //amount of bot
 var begginAmount = amount;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
@@ -20,21 +20,21 @@ account.requestFBToken(function(obtainedToken, info) {
 	if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
 	
 	token = obtainedToken;
-	console.log("TOKEN : " + token);
-	console.log("expire in : " + account.token_expire);
+	console.log("\033[44m\033[31mTOKEN : \033[32m" + token);
+	console.log("\033[31mexpire in : \033[32m" + account.token_expire);
 	console.log(account);
 	start();
 });
 
 function start() {
 	while (amount != 0) {
-		if (token != "null") {
+		if (token == "null") {
 			return;
 		}
 		else{
-			if (debugState == 0);
+			if (debugState == 0)
 				{
-					console.log("creating and assigning token to bots... TOKEN: " + token);
+					console.log("\033[40m\033[35mcreating and assigning token to bots... \033[31mTOKEN: \033[32m" + token + "\033[37m");
 					debugState++;
 				}
 				
@@ -73,8 +73,9 @@ if(amount == 0) {
 	console.log("serversChain: " + serversChain);
 	connectBots();
 }
-
 }
+
+
 
 function RequestFFAServer() {
 	AgarioClient.servers.getFFAServer({region: region}, function(srv) { 
@@ -122,3 +123,4 @@ function assignEvents() {
 	
 	
 }
+

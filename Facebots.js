@@ -98,11 +98,23 @@ function verifyIP(server) {
 
 function connectBots() {
 	amount = begginAmount;
+	if (debugState == 2) {
+		console.log("connecting bots...");
+		debugState++;
+	}
 	while (amount != 0) {
 		var botName = "bot" + amount;
 		console.log(botName + " is connecting...");
 		eval("botChain." + botName + ".connect(serversChain[amount]);");
 		amount--;
 	}
+	if (amount == 0) {
+		assignEvents;
+	}
+}
+
+function assignEvents() {
+	amount = begginAmount;
+	
 	
 }

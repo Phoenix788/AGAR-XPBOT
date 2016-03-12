@@ -13,7 +13,7 @@ var tempServ;
 function obtainFacebookToken() {
 	account = AgarioClient.Account()
 	account.requestFBToken(function(obtainedToken, info) {
-	    //If you have `token` then you can set it to `client.auth_token` 
+	    //If you have `token` then you can set it to `client.auth_token`
 	    // and `client.connect()` to agar server
 		if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
 		

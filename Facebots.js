@@ -19,7 +19,7 @@ function obtainFacebookToken() {
 		
 		token = obtainedToken;
 		console.log("TOKEN : " + token);
-		console.log("expire in : " account.token_expire)
+		console.log("expire in : " + account.token_expire)
 	});
 }
 
@@ -38,9 +38,10 @@ while (amount != 0) {
 		var botName = "bot" + amount;
 		var botObject;
 		eval("var " + botName + " = new AgarioClient(' "+ botName +" ');");
-		eval(botObject + " = " + botName);
-		botObject.auth_token = token;
-		eval("botChain." + botName + " = " botName);
+		eval("botChain." + botName + " = " + botName);
+		eval("botChain." + botName + ".auth_token = token");
+	//	botObject.auth_token = token;
+		
 		
 		amount--;
 		makeServerChain;
@@ -60,16 +61,15 @@ function makeServerChain() {
 		serversChain.push(tempServer);
 		tempServ = null
 		amount--;
-	}
-	else
-	{
+	} else {
 		tempServ = null;
 	}
-}
-else {
-	console.log("serversChain: " serversChain);
+} 
+if(amount == 0) {
+	console.log("serversChain: " + serversChain);
 	connectBots();
 }
+
 }
 
 function RequestFFAServer() {
@@ -89,11 +89,9 @@ function verifyIP(server) {
 		{
 			return false;
 		}
-		else {
-			i--;
-		}
+		i--;
 	}
-	else {
+	if (i == 0){
 		return true;
 	}
 }

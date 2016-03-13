@@ -10,5 +10,5 @@ Facebots are bots that login with your facebook account and gain mass (a.k.a XP)
   - ENJOY !!!
 
 # TODO
-- Set a timeout to connect bot to avoid the "connection lost ! !" error
+- Set a timeout to connect bot to avoid the "connection lost ! !" error ALREADY DO !
 - make a stat board with mass average using ansi escapes codes.

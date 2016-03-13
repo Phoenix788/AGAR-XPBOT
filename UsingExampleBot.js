@@ -2,8 +2,8 @@ var AgarioClient = require('agario-client');
 var amount = 10; //amount of bot
 var begginAmount = amount;
 var token = "null";
-var myaccount = {c_user: "100004281284637", datr: "e7HdVmBQ9kEkPZG5L5QMZok1", xs: "203%3ASG2ABr7g3o8xQA%3A2%3A1457372919%3A14980"};
-var botChain = {};
+var myaccount = {c_user: "1YOUR", datr: "YOUR", xs: "YOUR"};
+var botChain = [];
 var debugState = 0;
 var serversChain = [];
 var region = "EU-London";
@@ -14,6 +14,62 @@ var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
 account.datr = myaccount.datr;
 account.xs = myaccount.xs;
+
+function ExampleBot(bot_id) {
+    this.bot_id      = bot_id;         //ID of bot for logging
+    this.nickname    = 'Facebots :\)'; //default nickname
+    this.verbose     = true;           //default logging enabled
+    this.interval_id = 0;              //here we will store setInterval's ID
+
+    this.client       = new AgarioClient('Bot ' + this.bot_id); //create new client
+    this.client.debug = 1; //lets set debug to 1
+	
+	this.auth_token = null;
+}
+
+ExampleBot.prototype = {
+    log: function(text) {
+        if(this.verbose) {
+            console.log(this.bot_id + ' says: ' + text);
+        }
+    },
+
+    connect: function(server) {
+		this.client.auth_token = token;
+        this.client.connect(server);
+        this.Events();
+    },
+
+    Events: function() {
+        var bot = this;
+
+        bot.client.on('connected', function() {
+            bot.log('Connected, spawning');
+            bot.client.spawn(bot.nickname);
+            //we will search for target to eat every 100ms
+        });
+
+        bot.client.on('connectionError', function(e) {
+            bot.log('Connection failed with reason: ' + e);
+            bot.log('Server address set to: ' + bot.server + ' key ' + bot.server_key);
+        });
+
+
+        bot.client.on('lostMyBalls', function() {
+            bot.log('Lost all my balls, respawning');
+            bot.client.spawn(bot.nickname);
+        });
+
+        bot.client.on('disconnect', function() {
+            bot.log('Disconnected from server, bye!');
+        });
+
+        bot.client.on('reset', function() { //when client clears everything (connection lost?)
+			console.log("connection lost !");
+        });
+    }
+};
+
 
 account.requestFBToken(function(obtainedToken, info) {
     //If you have `token` then you can set it to `client.auth_token`
@@ -28,9 +84,9 @@ account.requestFBToken(function(obtainedToken, info) {
 });
 
 function start() {
-	while (amount != 0) {
+	
 		if (token == "null") {
-			return;
+			return console.log('no token.');
 		}
 		else{
 			if (debugState == 0)
@@ -39,28 +95,26 @@ function start() {
 					debugState++;
 				}
 				
-			var botName = "bot" + amount;
-			var botObject;
-			eval("var " + botName + " = new AgarioClient(' "+ botName +" ');");
-			eval("botChain." + botName + " = " + botName);
-			eval("botChain." + botName + ".auth_token = token");
-		//	botObject.auth_token = token;
-			
-			
-			amount--;
+				ExampleBot.auth_token = token;
 			makeServerChain();
 		}
-	}
+	
 }
 
 function makeServerChain() {
+	amount = begginAmount;
 	if (debugState == 1) {
 		console.log("requesting different FFA servers for Bots...");
 		debugState++;
 	}
-	RequestFFAServer();
+	while (amount !=0 ){
+		RequestFFAServer();
+		amount--;
+		
+	}
 	if (amount == 0) {
-		setTimeout(connectBots, 1000);
+		setTimeout(console.log('successfull ! !' + serversChain), 3000);
+		amount = begginAmount;
 	}
 }
 
@@ -70,45 +124,14 @@ function RequestFFAServer() {
 		tmp = "ws://" + srv.server;
 		console.log("Server IP: " + tmp);
 		serversChain.push(tmp);
-		
+		connectABot(tmp);
 	});
 }
 
-function connectBots() {
-	amount = begginAmount;
-	if (debugState == 2) {
-		console.log("connecting bots...");
-		debugState++;
-	}
-	while (amount != 0) {
-		var botName = "bot" + amount;
-		console.log(botName + " is connecting...");
-		console.log(serversChain[amount - 1]);
-		eval("botChain." + botName + ".connect(serversChain[amount - 1]);");
-		amount--;
-	}
-	if (amount == 0) {
-		assignEvents();
-	}
-}
-
-
-function assignEvents() {
-	amount = begginAmount;
-	if (debugState == 3) {
-		console.log("assigning events");
-		debugState++;
-	}
-	while(amount != 0) {
-		botName = "bot" + amount;
-		botName = "botChain." + botName;
-		eval(botName + ".on('connected', function() {botName.spawn('facebots ;\)'); console.log('spawning');});");
-		eval(botName + ".on('lostMyBalls', function() {botName.spawn('facebots ;\)'); console.log('respawning');});");
-		/*botObject.on('connected', connected);
-		botObject.on('lostMyBalls', died);*/
-	}
-	
-	
+function connectABot(server) {
+	var Fbot = new ExampleBot(amount.toString());
+	Fbot.connect(server);
+	amount--;
 }
 
 

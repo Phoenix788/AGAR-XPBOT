@@ -2,13 +2,14 @@ var AgarioClient = require('agario-client');
 var amount = 10; //amount of bot
 var begginAmount = amount;
 var token = "null";
-var myaccount = {c_user: "1YOUR", datr: "YOUR", xs: "YOUR"};
+var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
 var botChain = [];
 var debugState = 0;
 var serversChain = [];
 var region = "EU-London";
 var tempServ;
-
+var interval;
+var candidateFood = {};
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
@@ -21,7 +22,7 @@ function ExampleBot(bot_id) {
     this.verbose     = true;           //default logging enabled
     this.interval_id = 0;              //here we will store setInterval's ID
 
-    this.client       = new AgarioClient('Bot ' + this.bot_id); //create new client
+    this.client       = new AgarioClient(this.bot_id); //create new client
     this.client.debug = 1; //lets set debug to 1
 	
 	this.auth_token = null;
@@ -46,14 +47,39 @@ ExampleBot.prototype = {
         bot.client.on('connected', function() {
             bot.log('Connected, spawning');
             bot.client.spawn(bot.nickname);
-            //we will search for target to eat every 100ms
         });
 
         bot.client.on('connectionError', function(e) {
             bot.log('Connection failed with reason: ' + e);
             bot.log('Server address set to: ' + bot.server + ' key ' + bot.server_key);
         });
+		
+		bot.client.on('ballAppear', function(id) {
+			var ball = bot.client.balls[id];
+			var candi;
+			//console.log("candidateFood.bot" +bot.client.client_name);
+			eval("candi = candidateFood.bot" +bot.client.client_name);
+			if (ball.mass == 1 && candi == null) {
+				eval("candidateFood.bot" + bot.client.client_name + " = " + id);
+				console.log("new candidate. mass: " + ball.mass);
+				bot.client.moveTo(ball.x, ball.y);
+			}
+			
+		});
 
+		bot.client.on('somebodyAteSomething', function(eater_id, eaten_id) {
+			var candi;
+			eval("candi = candidateFood.bot"+ bot.client.client_name);
+			if (eaten_id = candi) {
+				eval("candidateFood.bot" + bot.client.client_name + " = null");
+				console.log("my target was eated.");
+			}
+			if (bot.client.balls[bot.client.my_balls[0]] != undefined) {
+				console.log("										my size: " + bot.client.balls[bot.client.my_balls[0]].mass);
+			}
+			
+			
+		});
 
         bot.client.on('lostMyBalls', function() {
             bot.log('Lost all my balls, respawning');
@@ -67,6 +93,11 @@ ExampleBot.prototype = {
         bot.client.on('reset', function() { //when client clears everything (connection lost?)
 			console.log("connection lost !");
         });
+		
+		bot.client.on('experienceUpdate', function(level, current_exp, need_exp) { //if facebook key used and server sent exp info
+		    client.log('Current Level' + level + ' and experience is ' + current_exp + '/' + need_exp);
+		});
+		
     }
 };
 

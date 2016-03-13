@@ -11,7 +11,7 @@ Facebots are bots that login with your facebook account and gain mass (a.k.a XP)
   - ENJOY !!!
 
 # Tuning
-- you can modify the amount of bots by modifying the ```ammount``` variable
+- you can modify the amount of bots by modifying the ```amount``` variable
 
 # TODO
 - Set a timeout to connect bot to avoid the "connection lost ! !" error ALREADY DO !

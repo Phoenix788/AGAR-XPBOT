@@ -1,5 +1,5 @@
 var AgarioClient = require('agario-client');
-var amount = 1; //amount of bot
+var amount = 49; //amount of bot
 var begginAmount = amount;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
@@ -10,6 +10,12 @@ var region = "EU-London";
 var tempServ;
 var interval;
 var candidateFood = {};
+var statChain = {averageMass: "NOT DEFINED !"};
+var statInterval;
+var statUpdateInterval;
+var statScreenRefreshInterval = 100;
+var statScreenUpdateInterval = 500;
+var botMassChain = {};
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
@@ -19,11 +25,11 @@ account.xs = myaccount.xs;
 function ExampleBot(bot_id) {
     this.bot_id      = bot_id;         //ID of bot for logging
     this.nickname    = 'Facebots :\)'; //default nickname
-    this.verbose     = true;           //default logging enabled
+    this.verbose     = false;           //default logging enabled
     this.interval_id = 0;              //here we will store setInterval's ID
 
     this.client       = new AgarioClient(this.bot_id); //create new client
-    this.client.debug = 1; //lets set debug to 1
+    this.client.debug = 0; //lets set debug to 1
 	
 	this.auth_token = null;
 }
@@ -61,7 +67,7 @@ ExampleBot.prototype = {
 			eval("candi = candidateFood.bot" +bot.client.client_name);
 			if (ball.mass == 1 && candi == null) {
 				eval("candidateFood.bot" + bot.client.client_name + " = " + id);
-				console.log("new candidate. mass: " + ball.mass);
+				//console.log("new candidate. mass: " + ball.mass);
 				bot.client.moveTo(ball.x, ball.y);
 			}
 			
@@ -72,10 +78,10 @@ ExampleBot.prototype = {
 			eval("candi = candidateFood.bot"+ bot.client.client_name);
 			if (eaten_id = candi) {
 				eval("candidateFood.bot" + bot.client.client_name + " = null");
-				console.log("my target was eated.");
+				//console.log("my target was eated.");
 			}
 			if (bot.client.balls[bot.client.my_balls[0]] != undefined) {
-				console.log("										my size: " + bot.client.balls[bot.client.my_balls[0]].mass);
+				//console.log("										my size: " + bot.client.balls[bot.client.my_balls[0]].mass);
 			}
 			
 			
@@ -165,4 +171,21 @@ function connectABot(server) {
 	amount--;
 }
 
+function startStatScreen() {
+	statInterval = setInterval(printStatScreen, statScreenRefreshInterval);
+	statUpdateInterval = setInterval(recalculateStatScreen, statScreenUpdateInterval);
+}
 
+function printStatScreen() {
+	console.log("\033[2J\033[;HAverage mass: " + statChain.averageMass);
+}
+
+function racalculateStatScreen() {
+	
+	
+}
+
+function updateBotMassChain() {
+	
+	
+}

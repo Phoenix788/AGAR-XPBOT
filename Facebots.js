@@ -19,6 +19,8 @@ var statUpdateInterval;
 var statScreenRefreshInterval = 100;
 var statScreenUpdateInterval = 95;
 var botMassChain = {};
+var tempVar;
+var connected = begginAmount;
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
@@ -35,7 +37,7 @@ function ExampleBot(bot_id) {
 
     this.client       = new AgarioClient(this.bot_id); //create new client
     this.client.debug = 0; //lets set debug to 1
-	
+	this.server = '';
 	this.auth_token = null;
 }
 
@@ -45,13 +47,23 @@ ExampleBot.prototype = {
             console.log(this.bot_id + ' says: ' + text);
         }
     },
-
+	
+	reconnect: function() {
+		anotherTempVar.client.connect(this.server);
+	},
+	
     connect: function(server) {
+		this.server = server;
 		this.client.auth_token = token;
-        this.client.connect(server);
-        this.Events();
-    },
+		var randomNumber = (Math.floor((Math.random() * 10) + 1) * 1000);
+		var truc = this;
+		setTimeout(function () {
+			truc.client.connect(truc.server);
+		}, randomNumber);
+		this.Events();
 
+	},
+	
     Events: function() {
         var bot = this;
 
@@ -77,6 +89,13 @@ ExampleBot.prototype = {
 			}
 			
 		});
+		
+		bot.client.on('packetError', function(packet, err, preventCrash) {
+		   bot.client.log('Packet error detected for packet: ' + packet.toString());
+		   bot.client.log('Crash will be prevented, bot will be disconnected');
+		   preventCrash();
+	//	   bot.client.disconnect();
+		});
 
 		bot.client.on('somebodyAteSomething', function(eater_id, eaten_id) {
 			var candi;
@@ -94,20 +113,33 @@ ExampleBot.prototype = {
 		});
 
         bot.client.on('lostMyBalls', function() {
-            bot.log('Lost all my balls, respawning');
+            bot.client.log('Lost all my balls, respawning');
             bot.client.spawn(bot.nickname);
         });
 
         bot.client.on('disconnect', function() {
-            bot.log('Disconnected from server, bye!');
+            bot.client.log('Disconnected from server, bye!');
+			connected--;
+			console.log("connected bots: " +connected);
+			var randomNumber = (Math.floor((Math.random() * 10) + 1) * 1000);
+			setTimeout(function () {
+				bot.client.connect(bot.server);
+				connected++;
+				console.log("connected bots: " +connected);
+			}, randomNumber);
         });
 
         bot.client.on('reset', function() { //when client clears everything (connection lost?)
-			console.log("connection lost !");
+		//	console.log("connection lost !					" + bot.client.client_name);
+		/*	var randomNumber = (Math.floor((Math.random() * 10) + 1) * 1000);
+			setTimeout(function () {
+				bot.client.connect(bot.server);
+			}, randomNumber);*/
+
         });
 		
 		bot.client.on('experienceUpdate', function(level, current_exp, need_exp) { //if facebook key used and server sent exp info
-		    client.log('Current Level' + level + ' and experience is ' + current_exp + '/' + need_exp);
+		    bot.client.log('Current Level' + level + ' and experience is ' + current_exp + '/' + need_exp);
 		});
 		
     }

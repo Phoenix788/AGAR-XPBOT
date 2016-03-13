@@ -14,13 +14,15 @@ var statChain = {averageMass: "NOT DEFINED !"};
 var statInterval;
 var statUpdateInterval;
 var statScreenRefreshInterval = 100;
-var statScreenUpdateInterval = 500;
+var statScreenUpdateInterval = 95;
 var botMassChain = {};
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
 account.datr = myaccount.datr;
 account.xs = myaccount.xs;
+
+startStatScreen();
 
 function ExampleBot(bot_id) {
     this.bot_id      = bot_id;         //ID of bot for logging
@@ -82,6 +84,7 @@ ExampleBot.prototype = {
 			}
 			if (bot.client.balls[bot.client.my_balls[0]] != undefined) {
 				//console.log("										my size: " + bot.client.balls[bot.client.my_balls[0]].mass);
+				updateBotMassChain(bot.client.balls[bot.client.my_balls[0]].mass, bot.client.client_name);
 			}
 			
 			
@@ -172,20 +175,38 @@ function connectABot(server) {
 }
 
 function startStatScreen() {
-	statInterval = setInterval(printStatScreen, statScreenRefreshInterval);
-	statUpdateInterval = setInterval(recalculateStatScreen, statScreenUpdateInterval);
+//	statInterval = setInterval(printStatScreen, statScreenRefreshInterval);
+	//statUpdateInterval = setInterval(recalculateStatScreen, statScreenUpdateInterval);
 }
 
 function printStatScreen() {
 	console.log("\033[2J\033[;HAverage mass: " + statChain.averageMass);
 }
 
-function racalculateStatScreen() {
-	
+function recalculateStatScreen() {
+	//////////////////
+	// AVERAGE MASS//
+	/////////////////
+	var tmpLength = Object.size(botMassChain);
+	var i = 0;
+	var tempNumber = 0;
+	for (data in botMassChain) {
+		tempNumber = tempNumber + data;
+		statChain.averageMass = (tempNumber / tmpLength);
+		console.log(statChain.averageMass + "  			" + tempNumber + "/" + tmpLength);
+	}
 	
 }
 
-function updateBotMassChain() {
-	
-	
+function updateBotMassChain(mass, botName) {
+	//console.log(botName);
+	eval("botMassChain['bot" + botName + "'] = " + mass);
 }
+
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};

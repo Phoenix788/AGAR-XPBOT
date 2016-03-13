@@ -1,6 +1,5 @@
 // Made by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
 
-
 var AgarioClient = require('agario-client');
 var amount = 30; //amount of bot
 var begginAmount = amount;
@@ -31,7 +30,7 @@ startStatScreen();
 
 function ExampleBot(bot_id) {
     this.bot_id      = bot_id;         //ID of bot for logging
-    this.nickname    = 'Facebots :\)'; //default nickname
+    this.nickname    = 'AGAR-XPBOT'; //default nickname
     this.verbose     = false;           //default logging enabled
     this.interval_id = 0;              //here we will store setInterval's ID
 

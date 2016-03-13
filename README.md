@@ -7,6 +7,7 @@ Facebots are bots that login with your facebook account and gain mass (a.k.a XP)
   - in a terminal shell, do ```npm install agario-client && git clone https://github.com/camilleeyries/AGAR-XPBOT.git```
   - login to facebook.com and put the ```c_user```, ```datr``` and ```xs``` in the script a his respective place (var myaccount = {blablabla};)
   - do ``` cd AGAR-XPBOT && node Facebots.js```
+  - Star this repo to support me and then...
   - ENJOY !!!
 
 # TODO

@@ -82,11 +82,11 @@ ExampleBot.prototype = {
 			var candi;
 			//console.log("candidateFood.bot" +bot.client.client_name);
 			eval("candi = candidateFood.bot" +bot.client.client_name);
-			if (ball.mass == 1 && candi == null) {
+			if (ball.mass == 1 && candi === null) {
 				eval("candidateFood.bot" + bot.client.client_name + " = " + id);
 				//console.log("new candidate. mass: " + ball.mass);
 				bot.client.moveTo(ball.x, ball.y);
-				bot.client.split()
+				bot.client.split();
 			}
 			
 		});
@@ -101,11 +101,11 @@ ExampleBot.prototype = {
 		bot.client.on('somebodyAteSomething', function(eater_id, eaten_id) {
 			var candi;
 			eval("candi = candidateFood.bot"+ bot.client.client_name);
-			if (eaten_id = candi) {
+			if (eaten_id == candi) {
 				eval("candidateFood.bot" + bot.client.client_name + " = null");
 				//console.log("my target was eated.");
 			}
-			if (bot.client.balls[bot.client.my_balls[0]] != undefined) {
+			if (bot.client.balls[bot.client.my_balls[0]] !== undefined) {
 				//console.log("										my size: " + bot.client.balls[bot.client.my_balls[0]].mass);
 				updateBotMassChain(bot.client.balls[bot.client.my_balls[0]].mass, bot.client.client_name);
 			}
@@ -181,7 +181,7 @@ function start() {
 			return console.log('no token.');
 		}
 		else{
-			if (debugState == 0)
+			if (debugState === 0)
 				{
 					console.log("\033[40m\033[35mcreating and assigning token to bots... \033[31mTOKEN: \033[32m" + token + "\033[37m");
 					debugState++;
@@ -199,12 +199,12 @@ function makeServerChain() {
 		console.log("requesting different FFA servers for Bots...");
 		debugState++;
 	}
-	while (amount !=0 ){
+	while (amount !== 0 ){
 		RequestFFAServer();
 		amount--;
 		
 	}
-	if (amount == 0) {
+	if (amount === 0) {
 		setTimeout(console.log('successfull ! !' + serversChain), 3000);
 		amount = begginAmount;
 	}
@@ -242,7 +242,7 @@ function recalculateStatScreen() {
 	var tmpLength = Object.size(botMassChain);
 	var i = 0;
 	var tempNumber = 0;
-	for (data in botMassChain) {
+	for (for data in botMassChain) {
 		tempNumber = tempNumber + data;
 		statChain.averageMass = (tempNumber / tmpLength);
 		console.log(statChain.averageMass + "  			" + tempNumber + "/" + tmpLength);

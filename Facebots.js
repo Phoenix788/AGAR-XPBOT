@@ -1,7 +1,6 @@
 // Made by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
 
 var AgarioClient = require('agario-client');
-var amount = 30; //amount of bot
 var amount = 100; //amount of bot
 var begginAmount = amount;
 var token = "null";

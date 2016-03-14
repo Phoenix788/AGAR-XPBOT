@@ -27,5 +27,9 @@ Facebots are bots that login with your facebook account and gain mass (a.k.a XP)
 
 # If you can't fix your issue yourself, then open an issue (please add tags, I LOVE TAGS !)
 
+# Contributors
+  - ME(arfarf)
+  - hassanila97
+  - Petterholm
 Made by Camille Eyriès (http://github.com/camilleeyries/)
 You can modify this code for personal use, but you can't claim it as your, you need to refer this repo (http://github.com/camilleeyries/AGAR-XPBOT)

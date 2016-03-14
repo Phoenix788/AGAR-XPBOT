@@ -85,6 +85,7 @@ ExampleBot.prototype = {
 				eval("candidateFood.bot" + bot.client.client_name + " = " + id);
 				//console.log("new candidate. mass: " + ball.mass);
 				bot.client.moveTo(ball.x, ball.y);
+				bot.client.split()
 			}
 			
 		});

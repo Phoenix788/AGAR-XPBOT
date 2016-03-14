@@ -155,7 +155,7 @@ account.requestFBToken(function(obtainedToken, info) {
 	token = obtainedToken;
 	console.log("\033[44m\033[35mTOKEN : \033[32m" + token);
 	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
-	setInterval(updateToken, tokenRefresh);
+	set(updateToken, tokenRefresh);
 	console.log(account);
 	start();
 });
@@ -169,7 +169,6 @@ function updateToken() {
 		token = obtainedToken;
 		console.log("\033[44m\033[35mNEW TOKEN : \033[32m" + token);
 		console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
-		setInterval(updateToken, tokenRefresh);
 		console.log(account);
 		console.log('\033[40m\033[37m');
 	});

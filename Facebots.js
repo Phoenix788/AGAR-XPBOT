@@ -4,7 +4,7 @@ var AgarioClient = require('agario-client');
 var amount = 100; //amount of bot
 var begginAmount = amount;
 var token = "null";
-var myaccount = {c_user: "100004281284637", datr: "e7HdVmBQ9kEkPZG5L5QMZok1", xs: "203%3ASG2ABr7g3o8xQA%3A2%3A1457372919%3A14980"};;
+var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};;
 var botChain = [];
 var debugState = 0;
 var serversChain = [];
@@ -242,7 +242,7 @@ function recalculateStatScreen() {
 	var tmpLength = Object.size(botMassChain);
 	var i = 0;
 	var tempNumber = 0;
-	for ( var data in botMassChain) {
+	for ( data in botMassChain) {
 		tempNumber = tempNumber + data;
 		statChain.averageMass = (tempNumber / tmpLength);
 		console.log(statChain.averageMass + "  			" + tempNumber + "/" + tmpLength);

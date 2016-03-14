@@ -1,14 +1,15 @@
 // Made by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
 
 var AgarioClient = require('agario-client');
-var amount = 30; //amount of bot
+var amount = 500; // amount of bots
+var restartTimer = 20 // In mins..  Set to 0 for no restart
 var begginAmount = amount;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
 var botChain = [];
 var debugState = 0;
 var serversChain = [];
-var region = "EU-London";
+var region = "EU-London";  // EU-London -- RU-Russia -- TK-Turkey
 var tempServ;
 var interval;
 var candidateFood = {};
@@ -20,11 +21,18 @@ var statScreenUpdateInterval = 95;
 var botMassChain = {};
 var tempVar;
 var connected = begginAmount;
+var tokenRefresh = 0.5; // In mins
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
 account.datr = myaccount.datr;
 account.xs = myaccount.xs;
+
+if (restartTimer) {
+	setTimeout(function () {
+		process.exit();
+	}, restartTimer * 60 * 1000)
+}
 
 startStatScreen();
 
@@ -81,10 +89,11 @@ ExampleBot.prototype = {
 			var candi;
 			//console.log("candidateFood.bot" +bot.client.client_name);
 			eval("candi = candidateFood.bot" +bot.client.client_name);
-			if (ball.mass == 1 && candi == null) {
+			if (ball.mass == 1 && candi === null) {
 				eval("candidateFood.bot" + bot.client.client_name + " = " + id);
 				//console.log("new candidate. mass: " + ball.mass);
 				bot.client.moveTo(ball.x, ball.y);
+				bot.client.split();
 			}
 			
 		});
@@ -99,11 +108,11 @@ ExampleBot.prototype = {
 		bot.client.on('somebodyAteSomething', function(eater_id, eaten_id) {
 			var candi;
 			eval("candi = candidateFood.bot"+ bot.client.client_name);
-			if (eaten_id = candi) {
+			if (eaten_id == candi) {
 				eval("candidateFood.bot" + bot.client.client_name + " = null");
 				//console.log("my target was eated.");
 			}
-			if (bot.client.balls[bot.client.my_balls[0]] != undefined) {
+			if (bot.client.balls[bot.client.my_balls[0]] !== undefined) {
 				//console.log("										my size: " + bot.client.balls[bot.client.my_balls[0]].mass);
 				updateBotMassChain(bot.client.balls[bot.client.my_balls[0]].mass, bot.client.client_name);
 			}
@@ -151,11 +160,27 @@ account.requestFBToken(function(obtainedToken, info) {
 	if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
 	
 	token = obtainedToken;
-	console.log("\033[44m\033[31mTOKEN : \033[32m" + token);
-	console.log("\033[31mexpire in : \033[32m" + account.token_expire);
+	console.log("\033[44m\033[35mTOKEN : \033[32m" + token);
+	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
+	setInterval(updateToken, tokenRefresh * 60 * 1000);
 	console.log(account);
 	start();
 });
+
+function updateToken() {
+	account.requestFBToken(function(obtainedToken, info) {
+	    //If you have `token` then you can set it to `client.auth_token`
+	    // and `client.connect()` to agar server
+		if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
+	
+		token = obtainedToken;
+		console.log("\033[44m\033[35mNEW TOKEN : \033[32m" + token);
+		console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
+		console.log(account);
+		console.log('\033[40m\033[37m');
+	});
+	
+}
 
 function start() {
 	
@@ -163,7 +188,7 @@ function start() {
 			return console.log('no token.');
 		}
 		else{
-			if (debugState == 0)
+			if (debugState === 0)
 				{
 					console.log("\033[40m\033[35mcreating and assigning token to bots... \033[31mTOKEN: \033[32m" + token + "\033[37m");
 					debugState++;
@@ -181,12 +206,12 @@ function makeServerChain() {
 		console.log("requesting different FFA servers for Bots...");
 		debugState++;
 	}
-	while (amount !=0 ){
+	while (amount !== 0 ){
 		RequestFFAServer();
 		amount--;
 		
 	}
-	if (amount == 0) {
+	if (amount === 0) {
 		setTimeout(console.log('successfull ! !' + serversChain), 3000);
 		amount = begginAmount;
 	}
@@ -224,7 +249,7 @@ function recalculateStatScreen() {
 	var tmpLength = Object.size(botMassChain);
 	var i = 0;
 	var tempNumber = 0;
-	for (data in botMassChain) {
+	for ( data in botMassChain) {
 		tempNumber = tempNumber + data;
 		statChain.averageMass = (tempNumber / tmpLength);
 		console.log(statChain.averageMass + "  			" + tempNumber + "/" + tmpLength);

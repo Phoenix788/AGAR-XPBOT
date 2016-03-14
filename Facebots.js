@@ -20,6 +20,7 @@ var statScreenUpdateInterval = 95;
 var botMassChain = {};
 var tempVar;
 var connected = begginAmount;
+var tokenRefresh = 30000;
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
@@ -152,11 +153,28 @@ account.requestFBToken(function(obtainedToken, info) {
 	if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
 	
 	token = obtainedToken;
-	console.log("\033[44m\033[31mTOKEN : \033[32m" + token);
-	console.log("\033[31mexpire in : \033[32m" + account.token_expire);
+	console.log("\033[44m\033[35mTOKEN : \033[32m" + token);
+	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
+	setInterval(updateToken, tokenRefresh);
 	console.log(account);
 	start();
 });
+
+function updateToken() {
+	account.requestFBToken(function(obtainedToken, info) {
+	    //If you have `token` then you can set it to `client.auth_token`
+	    // and `client.connect()` to agar server
+		if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
+	
+		token = obtainedToken;
+		console.log("\033[44m\033[35mNEW TOKEN : \033[32m" + token);
+		console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
+		setInterval(updateToken, tokenRefresh);
+		console.log(account);
+		console.log('\033[40m\033[37m');
+	});
+	
+}
 
 function start() {
 	

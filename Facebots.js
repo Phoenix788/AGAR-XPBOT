@@ -250,7 +250,7 @@ function recalculateStatScreen() {
 	var tmpLength = Object.size(botMassChain);
 	var i = 0;
 	var tempNumber = 0;
-	for ( data in botMassChain) {
+	for (data in botMassChain) {
 		tempNumber = tempNumber + data;
 		statChain.averageMass = (tempNumber / tmpLength);
 		console.log(statChain.averageMass + "  			" + tempNumber + "/" + tmpLength);

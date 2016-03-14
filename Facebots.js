@@ -2,7 +2,7 @@
 
 var AgarioClient = require('agario-client');
 var amount = 500; // amount of bots
-var restartTimer = 20 // In mins..  Set to 0 for no restart
+var restartTimer = 20 // Only on Windows In mins..  Set to 0 for no restart
 var begginAmount = amount;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
@@ -19,6 +19,7 @@ var statUpdateInterval;
 var statScreenRefreshInterval = 100;
 var statScreenUpdateInterval = 95;
 var botMassChain = {};
+var isWin = /^win/.test(process.platform);
 var tempVar;
 var connected = begginAmount;
 var tokenRefresh = 0.5; // In mins
@@ -28,7 +29,7 @@ account.c_user = myaccount.c_user;
 account.datr = myaccount.datr;
 account.xs = myaccount.xs;
 
-if (restartTimer) {
+if (restartTimer && isWin) {
 	setTimeout(function () {
 		process.exit();
 	}, restartTimer * 60 * 1000)

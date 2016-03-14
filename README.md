@@ -22,5 +22,7 @@ Facebots are bots that login with your facebook account and gain mass (a.k.a XP)
 - make sure you have the latest version of agario-client
 - verify your facebooks account information ( I will make a video tutorial later )
 
+# If you can't fix your issue yourself, then open an issue (please add tags, I LOVE TAGS !)
+
 Made by Camille Eyriès (http://github.com/camilleeyries/)
 You can modify this code for personal use, but you can't claim it as your, you need to refer this repo (http://github.com/camilleeyries/AGAR-XPBOT)

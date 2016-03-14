@@ -5,7 +5,7 @@ var amount = 500; // amount of bots
 var restartTimer = 20 // Only on Windows In mins..  Set to 0 for no restart
 var begginAmount = amount;
 var token = "null";
-var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
+var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};;
 var botChain = [];
 var debugState = 0;
 var serversChain = [];
@@ -250,7 +250,7 @@ function recalculateStatScreen() {
 	var tmpLength = Object.size(botMassChain);
 	var i = 0;
 	var tempNumber = 0;
-	for (data in botMassChain) {
+	for ( data in botMassChain) {
 		tempNumber = tempNumber + data;
 		statChain.averageMass = (tempNumber / tmpLength);
 		console.log(statChain.averageMass + "  			" + tempNumber + "/" + tmpLength);

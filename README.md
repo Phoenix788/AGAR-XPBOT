@@ -28,7 +28,7 @@ Facebots are bots that login with your facebook account and gain mass (a.k.a XP)
 # If you can't fix your issue yourself, then open an issue (please add tags, I LOVE TAGS !)
 
 # Screenshots
-![Screenshot-1](images/Screenshot-1.png "Screenshot")
+![Screenshot-1](/Screenshot-1.png "Screenshot")
 
 # Contributors
   - ME(arfarf)

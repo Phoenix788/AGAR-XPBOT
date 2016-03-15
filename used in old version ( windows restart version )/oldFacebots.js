@@ -1,8 +1,8 @@
 // Made by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
 
 var AgarioClient = require('agario-client');
-var amount = 100; // amount of bots
-// var restartTimer = 20 // Only on Windows In mins..  Set to 0 for no restart // Used for windows users before 
+var amount = 500; // amount of bots
+var restartTimer = 20 // Only on Windows In mins..  Set to 0 for no restart
 var begginAmount = amount;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
@@ -19,40 +19,23 @@ var statUpdateInterval;
 var statScreenRefreshInterval = 100;
 var statScreenUpdateInterval = 95;
 var botMassChain = {};
-// var isWin = /^win/.test(process.platform); // used for windows before
+var isWin = /^win/.test(process.platform);
 var tempVar;
 var connected = begginAmount;
 var tokenRefresh = 0.5; // In mins
-var restartTime = 600000; // in milliseconds. 600000 ms = 10mn
-var isReconnecting = false;
-var timeoutTEST = null;
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
 account.datr = myaccount.datr;
 account.xs = myaccount.xs;
 
-function disconnectAllBots() {
-	console.log("RECONNECTING !");
-	isReconnecting = true;
-	setTimeout(function () {
-		isReconnecting = false;
-		var timeoutTEST = setTimeout(disconnectAllBots, restartTime);
-	}, 3000);
-}
-
-
-var timeoutTEST = setTimeout(disconnectAllBots, restartTime);
-console.log('timeoutTEST')
-
-/*if (restartTimer && isWin) { // used for windows before...
+if (restartTimer && isWin) {
 	setTimeout(function () {
 		process.exit();
 	}, restartTimer * 60 * 1000)
-}*/
+}
 
 startStatScreen();
-
 
 function ExampleBot(bot_id) {
     this.bot_id      = bot_id;         //ID of bot for logging
@@ -73,6 +56,10 @@ ExampleBot.prototype = {
         }
     },
 	
+	reconnect: function() {
+		anotherTempVar.client.connect(this.server);
+	},
+	
     connect: function(server) {
 		this.server = server;
 		this.client.auth_token = token;
@@ -87,7 +74,7 @@ ExampleBot.prototype = {
 	
     Events: function() {
         var bot = this;
-		bot.client.debug_level = this.debug;
+
         bot.client.on('connected', function() {
             bot.log('Connected, spawning');
             bot.client.spawn(bot.nickname);
@@ -108,11 +95,6 @@ ExampleBot.prototype = {
 				//console.log("new candidate. mass: " + ball.mass);
 				bot.client.moveTo(ball.x, ball.y);
 				bot.client.split();
-			}
-			
-			if (isReconnecting === true) {
-				bot.client.disconnect();
-				bot.client.log('im reconnecting...');
 			}
 			
 		});

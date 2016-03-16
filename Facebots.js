@@ -1,7 +1,8 @@
-// Made by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
+// Made with <3 by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
 
 var AgarioClient = require('agario-client');
-var amount = 100; // amount of bots
+
+var amount = 49; // amount of bots
 // var restartTimer = 20 // Only on Windows In mins..  Set to 0 for no restart // Used for windows users before 
 var begginAmount = amount;
 var token = "null";
@@ -13,37 +14,21 @@ var region = "EU-London";  // EU-London -- RU-Russia -- TK-Turkey
 var tempServ;
 var interval;
 var candidateFood = {};
-var statChain = {averageMass: "NOT DEFINED !"};
+/*var statChain = {averageMass: "NOT DEFINED !"}; // TODO: 
 var statInterval;
 var statUpdateInterval;
 var statScreenRefreshInterval = 100;
-var statScreenUpdateInterval = 95;
+var statScreenUpdateInterval = 95;*/
 var botMassChain = {};
 // var isWin = /^win/.test(process.platform); // used for windows before
 var tempVar;
 var connected = begginAmount;
-var tokenRefresh = 0.5; // In mins
-var restartTime = 600000; // in milliseconds. 600000 ms = 10mn
-var isReconnecting = false;
-var timeoutTEST = null;
-
+var tokenRefresh = 1; // In mins
+var restartTimer = 900000; // time before restart 15 mn here
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
 account.datr = myaccount.datr;
 account.xs = myaccount.xs;
-
-function disconnectAllBots() {
-	console.log("RECONNECTING !");
-	isReconnecting = true;
-	setTimeout(function () {
-		isReconnecting = false;
-		var timeoutTEST = setTimeout(disconnectAllBots, restartTime);
-	}, 3000);
-}
-
-
-var timeoutTEST = setTimeout(disconnectAllBots, restartTime);
-console.log('timeoutTEST')
 
 /*if (restartTimer && isWin) { // used for windows before...
 	setTimeout(function () {
@@ -51,8 +36,11 @@ console.log('timeoutTEST')
 	}, restartTimer * 60 * 1000)
 }*/
 
-startStatScreen();
+//startStatScreen(); //TODO:
 
+setTimeout(function () { // forever will restart Facebots.js after.	
+	process.exit(0);
+}, restartTimer);
 
 function ExampleBot(bot_id) {
     this.bot_id      = bot_id;         //ID of bot for logging
@@ -108,11 +96,6 @@ ExampleBot.prototype = {
 				//console.log("new candidate. mass: " + ball.mass);
 				bot.client.moveTo(ball.x, ball.y);
 				bot.client.split();
-			}
-			
-			if (isReconnecting === true) {
-				bot.client.disconnect();
-				bot.client.log('im reconnecting...');
 			}
 			
 		});
@@ -180,7 +163,7 @@ account.requestFBToken(function(obtainedToken, info) {
 	
 	token = obtainedToken;
 	console.log("\033[44m\033[35mTOKEN : \033[32m" + token);
-	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
+	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " mn");
 	setInterval(updateToken, tokenRefresh * 60 * 1000);
 	console.log(account);
 	start();
@@ -252,16 +235,18 @@ function connectABot(server) {
 	amount--;
 }
 
-function startStatScreen() {
-//	statInterval = setInterval(printStatScreen, statScreenRefreshInterval);
-	//statUpdateInterval = setInterval(recalculateStatScreen, statScreenUpdateInterval);
+function startStatScreen() { // TODO:
+	statInterval = setInterval(printStatScreen, statScreenRefreshInterval);
+	statUpdateInterval = setInterval(recalculateStatScreen, statScreenUpdateInterval);
 }
 
 function printStatScreen() {
+	//TODO:
 	console.log("\033[2J\033[;HAverage mass: " + statChain.averageMass);
 }
 
 function recalculateStatScreen() {
+	//TODO:
 	//////////////////
 	// AVERAGE MASS//
 	/////////////////
@@ -277,6 +262,7 @@ function recalculateStatScreen() {
 }
 
 function updateBotMassChain(mass, botName) {
+	//TODO:
 	//console.log(botName);
 	eval("botMassChain['bot" + botName + "'] = " + mass);
 }

@@ -1,23 +1,17 @@
 {
   "name": "FaceBots",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Open source Agar.io XP Farmer",
   "main": "src/Facebots.js",
   "dependencies": {
-    "ws": "latest",
     "agario-client": "latest",
-    "ultron" : "latest",
-	"forever-monitor" : "latest"
-  },
-  "devDependencies": {},
-  "scripts": {
-  },
+    "forever-monitor" : "latest"},
   "repository": {
     "type": "git",
     "url": "https://github.com/camilleeyries/AGAR-XPBOT"
   },
   "author": "camilleeyries",
-  "license": "Apache License 2.0",
+  "license": "MIT License 2.0",
   "bugs": {
     "url": "https://github.com/camilleeyries/AGAR-XPBOT/issues"
   },

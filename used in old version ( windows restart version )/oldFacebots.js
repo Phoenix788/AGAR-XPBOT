@@ -1,9 +1,8 @@
-// Made with <3 by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
+// Made by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
 
 var AgarioClient = require('agario-client');
-
-var amount = 49; // amount of bots
-// var restartTimer = 20 // Only on Windows In mins..  Set to 0 for no restart // Used for windows users before 
+var amount = 500; // amount of bots
+var restartTimer = 20 // Only on Windows In mins..  Set to 0 for no restart
 var begginAmount = amount;
 var token = "null";
 var myaccount = {c_user: "YOURCUSER", datr: "YOURDATR", xs: "YOURXS"};
@@ -14,33 +13,29 @@ var region = "EU-London";  // EU-London -- RU-Russia -- TK-Turkey
 var tempServ;
 var interval;
 var candidateFood = {};
-/*var statChain = {averageMass: "NOT DEFINED !"}; // TODO: 
+var statChain = {averageMass: "NOT DEFINED !"};
 var statInterval;
 var statUpdateInterval;
 var statScreenRefreshInterval = 100;
-var statScreenUpdateInterval = 95;*/
+var statScreenUpdateInterval = 95;
 var botMassChain = {};
-// var isWin = /^win/.test(process.platform); // used for windows before
+var isWin = /^win/.test(process.platform);
 var tempVar;
 var connected = begginAmount;
-var tokenRefresh = 1; // In mins
-var restartTimer = 900000; // time before restart 15 mn here
+var tokenRefresh = 0.5; // In mins
+
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
 account.datr = myaccount.datr;
 account.xs = myaccount.xs;
 
-/*if (restartTimer && isWin) { // used for windows before...
+if (restartTimer && isWin) {
 	setTimeout(function () {
 		process.exit();
 	}, restartTimer * 60 * 1000)
-}*/
+}
 
-//startStatScreen(); //TODO:
-
-setTimeout(function () { // forever will restart Facebots.js after.	
-	process.exit(0);
-}, restartTimer);
+startStatScreen();
 
 function ExampleBot(bot_id) {
     this.bot_id      = bot_id;         //ID of bot for logging
@@ -61,6 +56,10 @@ ExampleBot.prototype = {
         }
     },
 	
+	reconnect: function() {
+		anotherTempVar.client.connect(this.server);
+	},
+	
     connect: function(server) {
 		this.server = server;
 		this.client.auth_token = token;
@@ -75,7 +74,7 @@ ExampleBot.prototype = {
 	
     Events: function() {
         var bot = this;
-		bot.client.debug_level = this.debug;
+
         bot.client.on('connected', function() {
             bot.log('Connected, spawning');
             bot.client.spawn(bot.nickname);
@@ -163,7 +162,7 @@ account.requestFBToken(function(obtainedToken, info) {
 	
 	token = obtainedToken;
 	console.log("\033[44m\033[35mTOKEN : \033[32m" + token);
-	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " mn");
+	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh + " millisecond");
 	setInterval(updateToken, tokenRefresh * 60 * 1000);
 	console.log(account);
 	start();
@@ -235,18 +234,16 @@ function connectABot(server) {
 	amount--;
 }
 
-function startStatScreen() { // TODO:
-	statInterval = setInterval(printStatScreen, statScreenRefreshInterval);
-	statUpdateInterval = setInterval(recalculateStatScreen, statScreenUpdateInterval);
+function startStatScreen() {
+//	statInterval = setInterval(printStatScreen, statScreenRefreshInterval);
+	//statUpdateInterval = setInterval(recalculateStatScreen, statScreenUpdateInterval);
 }
 
 function printStatScreen() {
-	//TODO:
 	console.log("\033[2J\033[;HAverage mass: " + statChain.averageMass);
 }
 
 function recalculateStatScreen() {
-	//TODO:
 	//////////////////
 	// AVERAGE MASS//
 	/////////////////
@@ -262,7 +259,6 @@ function recalculateStatScreen() {
 }
 
 function updateBotMassChain(mass, botName) {
-	//TODO:
 	//console.log(botName);
 	eval("botMassChain['bot" + botName + "'] = " + mass);
 }

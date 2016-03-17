@@ -1,8 +1,6 @@
-
 @echo off
 
-
-where node >nul 2>&1
+where node >nul
 if %ERRORLEVEL% NEQ 0 (
 
     set SETUP_DIR=%CD%
@@ -17,36 +15,53 @@ if not exist "%systemdrive%\Program Files (x86)" (
 ) else (
     start https://nodejs.org/dist/v5.6.0/node-v5.6.0-x64.msi
 )
-cls
-@echo.
-@echo.
-@echo Please open the downloaded file and follow the instructions when it's done downloading...
-@echo Reopen this file after you have installed NodeJs...
-@echo.
-@echo.
-@echo Press any key to exit...
+
+echo.
+echo.
+echo Please open the downloaded file and follow the instructions when it's done downloading...
+echo Reopen this batch after you have installed NodeJs...
+echo.
+echo.
+echo Press any key to exit...
 pause >nul 2<&1
 exit
 
 ) else (
 
-@echo Cleaning cache... Please wait...
-@ call npm cache clean
-@cls
+if exist "node_modules/." (
+echo.
+echo Dependencies already installed...
 echo.
 echo.
-@echo Installing dependencies, please wait...
+set /p input="Do you want to update? (Y/N)"
+cls
+if "%input%" == "N" if "%input%" == "n" (
+echo.
+echo Press any key to exit...
+pause >nul
+)
+rd /s /q "node_modules/"
+)
+
+echo.
+echo.
+echo Clearing cache... Please wait...
+call npm cache clean
+cls
+echo.
+echo.
+echo Installing dependencies, please wait...
 call npm install
 cls
 echo.
 echo.
-@echo npm installed successfully...
+echo npm installed successfully...
 
 cls
 echo.
 echo.
-@echo All dependencies installed successfully...
-@echo.
-@echo Press any key to exit...
-@pause >nul 2<&1
+echo All dependencies installed successfully...
+echo.
+echo Press any key to exit...
+pause >nul
 )

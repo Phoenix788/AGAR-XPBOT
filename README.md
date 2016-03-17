@@ -49,10 +49,10 @@ Install [**NodeJs**] (https://nodejs.org/en/download/package-manager/) and [**Gi
   * <img src="src/images/cookiesTutorial.png" alt="Tutorial" width="80%";"/>
 * **6.** Run these commands in console:
 
- ``
-npm install
-node src/Start
-``
+
+``npm install``
+
+``node src/Start``
 
 * **7.** Launch Chrome/Firefox and go to Agar.io to see your xp raising. Enjoy :)
 

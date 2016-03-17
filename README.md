@@ -4,7 +4,8 @@
 
 **Facebots** are bots that login with your facebook account and gain mass (a.k.a XP) yor you.
 
-[**FAQ**] (https://github.com/camilleeyries/AGAR-XPBOT/issues) 
+[**FAQ**] (https://github.com/camilleeyries/AGAR-XPBOT/issues)
+
 [**Tutorial video (Coming Soon!)**] (https://youtube.com) 
 
 
@@ -43,15 +44,15 @@ Install [**NodeJs**] (https://nodejs.org/en/download/package-manager/) and [**Gi
 * **3.** Install this extension: ([Chrome] (https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg), [Firefox] (https://addons.mozilla.org/en-US/firefox/addon/cookie-manager-button/))
 * **4.** Go to [Facebook] (**Facebook.com**) and login with your account
 * **5.** Get ``c_user, datr and xs cookies`` using the extension you installed***
-  * <img src="src/images/cookiesTutorial-2.png" alt="Windows" width="80%";"/>
+  * <img src="src/images/cookiesTutorial-2.png" alt="Tutorial" width="80%";"/>
   * Now copy each of them and paste them in the right position in  **"Facebots.js"** in **"src"** folder and save it
-  * <img src="src/images/cookiesTutorial.png" alt="Windows" width="80%";"/>
+  * <img src="src/images/cookiesTutorial.png" alt="Tutorial" width="80%";"/>
 * **6.** Run these commands in console:
 
-```
+ ``
 npm install
-node src/Start```
-----------------------
+node src/Start``
+
 * **7.** Launch Chrome/Firefox and go to Agar.io to see your xp raising. Enjoy :)
 
 ----------------------

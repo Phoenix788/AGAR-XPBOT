@@ -3,35 +3,11 @@
  * Using AGARIO-CLIENT (https://github.com/pulviscriptor/agario-client) (pulviscriptor)
  **/
 
-
-// ----- CONFIG -----
-
-amount = 300; // Amount of bots
-restartTimer = 30; // Restart Timeout in mins..  Set to 0 for no restart
-accNumber = 1;  // Which account to use
-region = "EU-London";  // EU-London -- RU-Russia -- TK-Turkey -- CN-China -- BR-Brazil
-accountsArr = [
-	//{c_user: "YOUR_C_USER_1", datr: "YOUR_DATR_1", xs: "YOUR_XS_1"},
-    {c_user: "100009962194768", datr: "F6SnVvGpOOC1f-wt3YfVtXr9", xs: "168%3A0IOoCu-Yv2VJ9g%3A2%3A1453827132%3A10285"},
-	{c_user: "YOUR_C_USER_2", datr: "YOUR_DATR_2", xs: "YOUR_XS_2"},
-	{c_user: "YOUR_C_USER_3", datr: "YOUR_DATR_3", xs: "YOUR_XS_3"},
-];
-tokenRefresh = 5; // Time to refresh fb token in mins
-//botsName = 'AGAR-XPBOT'; // Bots name
-botsName = '﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽﷽௵'; // Bots name
-debug = 0; // Set to 1 for debugging
-
-// ------------------
-
-
-
-
-
-
 var AgarioClient = require('agario-client');
-var beginAmount = amount;
+config = require("../config.js");
+var beginAmount = config.amount;
 var token = null;
-myaccount = accountsArr[accNumber-1];
+myaccount = config.accountsArr[config.accNumber-1];
 var botChain = [];
 var debugState = 0;
 var serversChain = [];
@@ -46,6 +22,7 @@ var candidateFood = {};
 var botMassChain = {};
 var tempVar;
 var connected = 0;
+regions = config.regions;
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
@@ -53,29 +30,44 @@ account.datr = myaccount.datr;
 account.xs = myaccount.xs;
 
 
-if (restartTimer) {
-	console.log('Restart planned in ' + restartTimer + ' Minutes(s)...');
+if (config.restartTimer) {
+	console.log('Restart planned in ' + config.restartTimer + ' Minutes(s)...');
 	setInterval( function() {
-		restartTimer--;
-		console.log('Restarting in ' + restartTimer + ' Minutes(s)...');
+        config.restartTimer--;
+		console.log('Restarting in ' + config.restartTimer + ' Minutes(s)...');
 	}, 60000);
 	setTimeout(function () {
 		process.exit();
-	}, restartTimer * 60 * 1000)
+	}, config.restartTimer * 60 * 1000)
 }
 
-process.stdout.write(String.fromCharCode(27) + "]0;" + ' --- Facebots ---  ' + region + String.fromCharCode(7)); // Set title
+//process.stdout.write(String.fromCharCode(27) + "]0;" + ' --- Facebots ---  ' + region + String.fromCharCode(7)); // Set title
 
 startStatScreen();
 
+var regionCounterFFA = 0,
+    regionCounterParty = 0;
+
+function getRegionFFA() {
+    regionCounterFFA++;
+    if (regionCounterFFA >= regions.length) regionCounterFFA = 0;
+    return regions[regionCounterFFA];
+}
+
+function getRegionParty() {
+    regionCounterParty++;
+    if (regionCounterParty >= regions.length) regionCounterParty = 0;
+    return regions[regionCounterParty];
+}
+
 function ExampleBot(bot_id) {
 	this.bot_id      = bot_id;         //ID of bot for logging
-	this.nickname    = botsName;
-	this.verbose     = debug;           //default logging enabled
+	this.nickname    = config.botsName;
+	this.verbose     = config.debug;           //default logging enabled
 	this.interval_id = 0;              //here we will store setInterval's ID
 
 	this.client       = new AgarioClient(this.bot_id); //create new client
-	this.client.debug = debug; //lets set debug to 1
+	this.client.debug = config.debug; //lets set debug to 1
 	this.server = '';
 	this.auth_token = null;
 }
@@ -115,11 +107,17 @@ ExampleBot.prototype = {
 		bot.client.on('connectionError', function(e) {
 			clearInterval(bot.interval_id);
 			bot.log('Connection failed with reason: ' + e);
-			bot.log('Server address set to: ' + bot.server + ' key ' + bot.key);
+            if (config.debug) {
+                bot.log('Server address set to: ' + bot.server + ' key ' + bot.key);
+            }
 		});
 
 		bot.client.on('myNewBall', function(id) {
 			var ball = bot.client.balls[id];
+            /* if (bot.client.balls[bot.client.my_balls[0]] !== undefined) {
+                var mass = bot.client.balls[bot.client.my_balls[0]];
+                bot.client.log('MASS: ' + mass);
+            } */
 			eval("candidateFood.bot" + bot.client.client_name);
 			bot.interval_id = setInterval(function(){bot.recalculateTarget()}, 100);  // Find food every 100ms
 			bot.client.split();
@@ -129,9 +127,12 @@ ExampleBot.prototype = {
 
 		bot.client.on('packetError', function(packet, err, preventCrash) {
 			clearInterval(bot.interval_id);
-			bot.client.log('Packet error detected for packet: ' + packet.toString());
-			bot.client.log('Crash will be prevented, bot will be disconnected');
+            if (config.debug) {
+                bot.client.log('Packet error detected for packet: ' + packet.toString());
+                bot.client.log('Crash will be prevented, bot will be disconnected');
+            }
 			preventCrash();
+            connected--;
 			bot.reconnect();
 		});
 
@@ -150,20 +151,23 @@ ExampleBot.prototype = {
 		});
 
 		bot.client.on('lostMyBalls', function() {
-			bot.client.log('Eaten, Respawning');
+			bot.client.log('Got eaten, Respawning');
 			bot.client.spawn(bot.nickname);
 		});
 
 		bot.client.on('disconnect', function() {
 			clearInterval(bot.interval_id);
-			bot.client.log('Disconnected from server...');
+            if (config.debug) {
+                bot.client.log('Disconnected from server...');
+            }
 			connected--;
-			console.log("Connected bots: " +connected);
 			setTimeout(function () {
 				bot.client.connect(bot.server, bot.key);
 				//bot.reconnect();
-				console.log("connected bots: " +connected);
-			}, 300);
+                if (config.debug) {
+                    console.log("Connected bots: " + connected);
+                }
+			}, 500);
 		});
 
 		bot.client.on('reset', function() { //when client clears everything (connection lost?)
@@ -172,7 +176,7 @@ ExampleBot.prototype = {
 		});
 
 		bot.client.on('experienceUpdate', function(level, current_exp, need_exp) { //if facebook key used and server sent exp info
-			bot.client.log('Current Level' + level + ' and experience is ' + current_exp + '/' + need_exp);
+			bot.client.log('Current Level ' + level + ' and experience is ' + current_exp + '/' + need_exp);
 		});
 	},
 
@@ -207,20 +211,17 @@ ExampleBot.prototype = {
 
 
 account.requestFBToken(function(obtainedToken, info) {
-	// If you have `token` then you can set it to `client.auth_token`
-	// and `client.connect()` to agar server
-
 	if (info.error || obtainedToken == null) {
         setTimeout(function () {
             process.exit();
-        }, 3000);
+        }, 5000);
         return console.log('Error when trying to obtain fb token: ' + info.error);
     }
 
 	token = obtainedToken;
 	console.log("\033[44m\033[35mTOKEN : \033[32m" + token);
-	console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh * 60 + "Second(s)");
-	setInterval(updateToken, tokenRefresh * 60 * 1000);
+	console.log("\033[35mQuery a new token in : \033[32m" + config.tokenRefresh * 60 + " Second(s)");
+	setInterval(updateToken, config.tokenRefresh * 60 * 1000);
 	console.log(account);
 	start();
 });
@@ -229,11 +230,13 @@ function updateToken() {
 	account.requestFBToken(function(obtainedToken, info) {
 		//If you have `token` then you can set it to `client.auth_token`
 		// and `client.connect()` to agar server
-		if (info.error) console.log('error when trying to obtain fb token: ' + info.error);
+		if (info.error || obtainedToken == null) {
+           return console.log('Error when trying to obtain fb token: ' + info.error);
+        }
 
 		token = obtainedToken;
 		console.log("\033[44m\033[35mNEW TOKEN : \033[32m" + token);
-		console.log("\033[35mQuery a new token in : \033[32m" + tokenRefresh * 60 + " Second(s)");
+		console.log("\033[35mQuery a new token in : \033[32m" + config.tokenRefresh * 60 + " Second(s)");
 		console.log(account);
 		console.log('\033[40m\033[37m');
 	});
@@ -246,7 +249,7 @@ function start() {
 		return console.log('No token.');
 	}
 	else{
-		if (debugState === 0)
+		if (debugState == 0)
 		{
 			console.log("\033[40m\033[35mcreating and assigning token to bots... \033[31mTOKEN: \033[32m" + token + "\033[37m");
 			debugState++;
@@ -259,35 +262,52 @@ function start() {
 }
 
 function makeServerChain() {
-	amount = beginAmount;
+    console.log("Connecting...");
+
+    amount = beginAmount/2;
 	if (debugState == 1) {
 		console.log("Requesting different FFA servers for Bots...");
 		debugState++;
 	}
-	while (amount !== 0 ){
-		RequestFFAServer();
-		amount--;
+	while (amount != 0 ){
+		RequestFFAServer(getRegionFFA());
+        RequestPartyServer(getRegionParty());
+        amount--;
 	}
-	if (amount === 0) {
-		setTimeout(console.log('successfull ! !' + serversChain), 300);
+	if (amount == 0) {
+		setTimeout(console.log('Successfull !' + serversChain), 1000);
 		amount = beginAmount;
 	}
 }
 
-function RequestFFAServer() {
+function RequestFFAServer(region) {
 	AgarioClient.servers.getFFAServer({region: region}, function(srv) {
 		if(!srv.server) return console.log('Failed to request server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
-		tmp = "ws://" + srv.server;
-		//console.log("Server IP: " + tmp);
-		serversChain.push(tmp);
-		connectABot(tmp, srv.key);
+		server = "ws://" + srv.server;
+        if (config.debug) {
+            console.log("Server IP: " + server);
+        }
+		serversChain.push(server);
+		connectABot(server, srv.key);
 	});
+}
+
+function RequestPartyServer(region) {
+    AgarioClient.servers.createParty({region: region}, function(srv) {
+        if(!srv.server) return console.log('Failed to request server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
+        server = "ws://" + srv.server;
+        if (config.debug) {
+            console.log("Server IP: " + server);
+        }
+        serversChain.push(server);
+        connectABot(server, srv.key);
+    });
 }
 
 function connectABot(server, key) {
 	var Fbot = new ExampleBot(amount.toString());
 	Fbot.connect(server, key);
-	amount--;
+    amount--;
 }
 
 function startStatScreen() {

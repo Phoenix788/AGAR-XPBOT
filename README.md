@@ -1,15 +1,16 @@
-﻿# Agario XPBOT (a.k.a Facebots)
+﻿# Agario XPBOTS (a.k.a Facebots)
 
 -------------------------
 
 **Facebots** are bots that login with your facebook account and gain mass (a.k.a XP) yor you.
 
-[Tutorial video (Coming Soon!)] (https://youtube.com) 
+[**FAQ**] (https://github.com/camilleeyries/AGAR-XPBOT/issues) 
+[**Tutorial video (Coming Soon!)**] (https://youtube.com) 
 
 
 # Installation
 
-**Windows**     <img src="src/images/windows.png" alt="Windows" width="7%";"/>
+**Windows**     <img src="src/images/windows.png" alt="Windows" width="5%";"/>
 ----------------------
 
 * **1.** Install NodeJs [(32 bit)] (https://nodejs.org/dist/v5.6.0/node-v5.6.0-x86.msi)  [(64 bit)] (https://nodejs.org/dist/v5.6.0/node-v5.6.0-x64.msi)
@@ -18,11 +19,11 @@
 * **4.** Open "Install Dependencies (Windows).bat" and follow the instructions
 * **5.** Install this extension: ([Chrome] (https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg), [Firefox] (https://addons.mozilla.org/en-US/firefox/addon/cookie-manager-button/))
 * **6.** Go to [Facebook] (**Facebook.com**) and login with your account
-* **7.** Get ``c_user, datr and xs cookies`` using the extension you installed
-  * Now copy each of them and paste them in the  right position in  "Facebots.js" in "src" folder
-  * <img src="src/images/cookiesTutorial.png" alt="Windows" width="20%";"/>
-* **8.** Copy proxy.sample.txt to proxy.txt and paste you proxies under correct section... (Update them everyday... you can get them on Google for free)
-  * You need to use proxies to connect multiple bots, the usual max limit for one IP is **3** clients/bots
+* **7.** Get ``c_user, datr and xs cookies`` using the extension you installed***
+  * <img src="src/images/cookiesTutorial-2.png" alt="Windows" width="80%";"/>
+  * Now copy each of them and paste them in the right position in  **"Facebots.js"** in **"src"** folder and save it
+  * <img src="src/images/cookiesTutorial.png" alt="Windows" width="80%";"/>
+* **8.** Open "Install Dependencies (Windows).bat" and follow the instructions...
 * **9.** Open "Start (Windows).bat"
 * **10.** Launch Chrome/Firefox and go to Agar.io to see your xp raising. Enjoy :)
 
@@ -30,10 +31,28 @@ If you don't understand these "simple" instructions open an issue...
 
 -------------
 
-**Other OS**       <img src="src/images/linux.png" alt="Linux" width="7%";"/> <img src="src/images/mac.png" alt="Mac" width="7%";"/>
+**Other OS**       <img src="src/images/linux.png" alt="Linux" width="5%";"/> <img src="src/images/mac.png" alt="Mac" width="5%";"/>
 ----------------------
 
-**Coming soon!**
+Install [**NodeJs**] (https://nodejs.org/en/download/package-manager/) and [**Git**] (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+
+* **1.** git clone this repo
+
+* **2.** cd to the repo e.g. ``cd agar-xpbots/``
+
+* **3.** Install this extension: ([Chrome] (https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg), [Firefox] (https://addons.mozilla.org/en-US/firefox/addon/cookie-manager-button/))
+* **4.** Go to [Facebook] (**Facebook.com**) and login with your account
+* **5.** Get ``c_user, datr and xs cookies`` using the extension you installed***
+  * <img src="src/images/cookiesTutorial-2.png" alt="Windows" width="80%";"/>
+  * Now copy each of them and paste them in the right position in  **"Facebots.js"** in **"src"** folder and save it
+  * <img src="src/images/cookiesTutorial.png" alt="Windows" width="80%";"/>
+* **6.** Run these commands in console:
+
+```
+npm install
+node src/Start```
+----------------------
+* **7.** Launch Chrome/Firefox and go to Agar.io to see your xp raising. Enjoy :)
 
 ----------------------
 
@@ -41,13 +60,13 @@ If you don't understand these "simple" instructions open an issue...
 - You can modify many options in the Facebots.js file
 
 # TODO
-- Set a timeout to connect bot to avoid the "connection lost !!" error ALREADY DO !
+- Set a timeout to connect bot to avoid the "connection lost !!" error!
 - Make a stat board with mass average using ansi escapes codes.
 
 # Issues
 - Make sure you have the latest version of agario-client
-- Verify your facebooks account information (I will make a video tutorial later)
-- If you can't fix your issue yourself, then open an issue and (please add tags, I LOVE TAGS!)
+- Verify your facebooks account information (Tutorial video coming soon!)
+- If you can't fix your issue yourself, then open an issue
 
 # Screenshots
 ![Screenshot-1](src/images/Screenshot-1.png "Screenshot-1")

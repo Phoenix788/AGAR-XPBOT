@@ -2,6 +2,70 @@
  * Made with <3 by camilleeyries (http://github.com/camilleeyries) (alias Faewui)
  * Using AGARIO-CLIENT (https://github.com/pulviscriptor/agario-client) (pulviscriptor)
  **/
+var Socks;
+try {
+    Socks = require('socks');
+}catch(e){
+    console.log('Failed to load `socks` lib. Install it in examples path using:');
+    console.log('  npm install socks ');
+    process.exit(0);
+}
+//Make random proxy selection- AgarioCheats
+var number = 0;
+function random () {
+	number+=Math.floor(Math.random() * (20));
+	if(number %2 == 1){
+		if(number == 20) {
+			number = number-1;
+		} else {
+			number = number+1;
+		}
+	}
+    return number
+}
+random();
+console.log(number);
+
+//----Socks LIST (Update these to your working socks list)----------------
+
+var listOfSocks = {
+	proxy1: '85.94.190.125', //0
+	port1: '34002',
+	proxy2: '88.151.143.222',
+	port2: '34002',
+	proxy3: '88.151.25.234',
+	port3: '34002',
+	proxy4: '88.199.56.150',
+	port4: '34002',
+	proxy5: '88.220.122.198',
+	port5: '34002',
+	proxy6: '89.117.107.237', //10
+	port6: '34002',
+	proxy7: '89.39.120.250',
+	port7: '34002',
+	proxy8: '85.25.207.96',
+	port8: '56863',
+	proxy9: '85.25.207.96',
+	port9: '55174',
+	proxy10: '85.67.105.3',
+	port10: '34002',
+	proxy11: '89.117.235.25',
+	port11: '34002' //20
+};
+
+//----Socks LIST (Update these to your working socks list)----------------
+
+var proxy = function (obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[number]];
+};
+var port = function (obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[number+1]];
+};
+
+console.log(proxy(listOfSocks));
+console.log(port(listOfSocks));
 
 var AgarioClient = require('agario-client');
 config = require("../config.js");
@@ -23,6 +87,20 @@ var botMassChain = {};
 var tempVar;
 var connected = 0;
 regions = config.regions;
+
+function createAgent() {
+    return new Socks.Agent({
+            proxy: {
+               // ipaddress: process.argv[3],
+                //port: parseInt(process.argv[4]),
+                //type: parseInt(process.argv[2])
+                ipaddress: proxy(listOfSocks),
+                port: parseInt(port(listOfSocks)),
+                type: parseInt(4)
+            }}
+    );
+}
+var agent = createAgent();
 
 var account = new AgarioClient.Account();
 account.c_user = myaccount.c_user;
@@ -120,7 +198,6 @@ ExampleBot.prototype = {
             } */
 			eval("candidateFood.bot" + bot.client.client_name);
 			bot.interval_id = setInterval(function(){bot.recalculateTarget()}, 100);  // Find food every 100ms
-			bot.client.split();
 			bot.client.split();
 
 		});
@@ -271,7 +348,8 @@ function makeServerChain() {
 	}
 	while (amount != 0 ){
 		RequestFFAServer(getRegionFFA());
-        RequestPartyServer(getRegionParty());
+		RequestExpServer(getRegionFFA());
+       	RequestPartyServer(getRegionParty());
         amount--;
 	}
 	if (amount == 0) {
@@ -279,22 +357,42 @@ function makeServerChain() {
 		amount = beginAmount;
 	}
 }
-
-function RequestFFAServer(region) {
-	AgarioClient.servers.getFFAServer({region: region}, function(srv) {
-		if(!srv.server) return console.log('Failed to request server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
+function RequestExpServer(region) {
+		AgarioClient.servers.getExperimentalServer({region: region, agent: agent}, function(srv) {
+		if(!srv.server) return console.log('Failed to EXP request server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
 		server = "ws://" + srv.server;
         if (config.debug) {
             console.log("Server IP: " + server);
         }
 		serversChain.push(server);
 		connectABot(server, srv.key);
-	});
+	});	
+}
+
+function RequestFFAServer(region) {
+	AgarioClient.servers.getFFAServer({region: region, agent: agent}, function(srv) {
+		if(!srv.server) return console.log('Failed to FFA request server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
+		server = "ws://" + srv.server;
+        if (config.debug) {
+            console.log("Server IP: " + server);
+        }
+		serversChain.push(server);
+		connectABot(server, srv.key);
+	});	
+}
+
+var get_server_opt = {
+    region: getRegionFFA(), //server region
+    agent:  agent        //our agent
+};
+
+if(process.argv[2] == '4') {
+    get_server_opt.resolve = true;
 }
 
 function RequestPartyServer(region) {
-    AgarioClient.servers.createParty({region: region}, function(srv) {
-        if(!srv.server) return console.log('Failed to request server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
+    AgarioClient.servers.createParty({region: region, agent: agent}, function(srv) {
+        if(!srv.server) return console.log('Failed to request PARTY server (error=' + srv.error + ', error_source=' + srv.error_source + ')'); // in case of error...
         server = "ws://" + srv.server;
         if (config.debug) {
             console.log("Server IP: " + server);
@@ -321,7 +419,7 @@ function printStatScreen() {
 
 function recalculateStatScreen() {
 	//////////////////
-	// AVERAGE MASS//
+	// AVERAGE MASS AgarVIPbots.com//
 	/////////////////
 	var tmpLength = Object.size(botMassChain);
 	var i = 0;

@@ -3,7 +3,7 @@
 
 module.exports = {
 
-amount: 100, // MAX Amount of bots
+amount: 450, // MAX Amount of bots
 restartTimer : 30, // Restart Timeout in mins..  Set to 0 for no restart
 accNumber: 1,  // Which account to use
 regions: ["BR-Brazil", "CN-China", "EU-London", "JP-Tokyo", "RU-Russia", "SG-Singapore", "TK-Turkey", "US-Atlanta"],
